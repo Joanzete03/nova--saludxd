@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-09-2021 a las 14:35:01
--- Versión del servidor: 10.4.20-MariaDB
--- Versión de PHP: 8.0.9
+-- Tiempo de generación: 08-05-2025 a las 06:36:24
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,10 +29,18 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `cliente` (
   `idcliente` int(11) NOT NULL,
-  `nombre` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `telefono` varchar(15) COLLATE utf8_spanish_ci NOT NULL,
-  `direccion` varchar(200) COLLATE utf8_spanish_ci NOT NULL
+  `nombre` varchar(100) NOT NULL,
+  `telefono` varchar(15) NOT NULL,
+  `direccion` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `cliente`
+--
+
+INSERT INTO `cliente` (`idcliente`, `nombre`, `telefono`, `direccion`) VALUES
+(1, 'Juan Pérez', '987654321', 'Av. Perú 123, Trujillo'),
+(2, 'Lucía Ramos', '923456789', 'Calle Lima 456, Chiclayo');
 
 -- --------------------------------------------------------
 
@@ -42,10 +50,10 @@ CREATE TABLE `cliente` (
 
 CREATE TABLE `configuracion` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `telefono` varchar(15) COLLATE utf8_spanish_ci NOT NULL,
-  `email` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `direccion` text COLLATE utf8_spanish_ci NOT NULL
+  `nombre` varchar(100) NOT NULL,
+  `telefono` varchar(15) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `direccion` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
@@ -53,7 +61,7 @@ CREATE TABLE `configuracion` (
 --
 
 INSERT INTO `configuracion` (`id`, `nombre`, `telefono`, `email`, `direccion`) VALUES
-(1, 'Sistemas Free', '98745698', 'ana.info1999@gamil.com', 'Trujillo');
+(1, 'Farma Plus', '98745698', 'farma_plus@gamil.com', 'Chiclayo');
 
 -- --------------------------------------------------------
 
@@ -65,7 +73,7 @@ CREATE TABLE `detalle_permisos` (
   `id` int(11) NOT NULL,
   `id_permiso` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -97,7 +105,15 @@ CREATE TABLE `detalle_venta` (
   `descuento` decimal(10,2) NOT NULL DEFAULT 0.00,
   `precio` decimal(10,2) NOT NULL,
   `total` decimal(10,2) NOT NULL DEFAULT 0.00
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `detalle_venta`
+--
+
+INSERT INTO `detalle_venta` (`id`, `id_producto`, `id_venta`, `cantidad`, `descuento`, `precio`, `total`) VALUES
+(1, 1, 1, 2, 0.00, 2.50, 5.00),
+(2, 2, 2, 1, 0.00, 3.80, 3.80);
 
 -- --------------------------------------------------------
 
@@ -109,7 +125,16 @@ CREATE TABLE `laboratorios` (
   `id` int(11) NOT NULL,
   `laboratorio` varchar(100) NOT NULL,
   `direccion` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `laboratorios`
+--
+
+INSERT INTO `laboratorios` (`id`, `laboratorio`, `direccion`) VALUES
+(1, 'Laboratorios Bagó', 'Av. Javier Prado 123, Lima'),
+(2, 'Pfizer Perú', 'Calle Los Laureles 456, San Isidro'),
+(3, 'Roche', 'Av. Primavera 789, Surco');
 
 -- --------------------------------------------------------
 
@@ -120,7 +145,7 @@ CREATE TABLE `laboratorios` (
 CREATE TABLE `permisos` (
   `id` int(11) NOT NULL,
   `nombre` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `permisos`
@@ -147,7 +172,16 @@ CREATE TABLE `presentacion` (
   `id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
   `nombre_corto` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `presentacion`
+--
+
+INSERT INTO `presentacion` (`id`, `nombre`, `nombre_corto`) VALUES
+(1, 'Tableta', 'TAB'),
+(2, 'Jarabe', 'JAR'),
+(3, 'Inyectable', 'INY');
 
 -- --------------------------------------------------------
 
@@ -157,15 +191,24 @@ CREATE TABLE `presentacion` (
 
 CREATE TABLE `producto` (
   `codproducto` int(11) NOT NULL,
-  `codigo` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `descripcion` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
+  `codigo` varchar(20) NOT NULL,
+  `descripcion` varchar(200) NOT NULL,
   `precio` decimal(10,2) NOT NULL,
   `existencia` int(11) NOT NULL,
   `id_lab` int(11) NOT NULL,
   `id_presentacion` int(11) NOT NULL,
   `id_tipo` int(11) NOT NULL,
-  `vencimiento` varchar(20) COLLATE utf8_spanish_ci NOT NULL
+  `vencimiento` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `producto`
+--
+
+INSERT INTO `producto` (`codproducto`, `codigo`, `descripcion`, `precio`, `existencia`, `id_lab`, `id_presentacion`, `id_tipo`, `vencimiento`) VALUES
+(1, 'PROD001', 'Paracetamol 500mg', 2.50, 100, 1, 1, 1, '2026-12-01'),
+(2, 'PROD002', 'Amoxicilina 500mg', 3.80, 80, 2, 1, 2, '2025-10-15'),
+(3, 'PROD003', 'Ibuprofeno 400mg', 3.00, 60, 3, 1, 3, '2026-05-20');
 
 -- --------------------------------------------------------
 
@@ -176,7 +219,16 @@ CREATE TABLE `producto` (
 CREATE TABLE `tipos` (
   `id` int(11) NOT NULL,
   `tipo` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tipos`
+--
+
+INSERT INTO `tipos` (`id`, `tipo`) VALUES
+(1, 'Analgésico'),
+(2, 'Antibiótico'),
+(3, 'Antiinflamatorio');
 
 -- --------------------------------------------------------
 
@@ -186,10 +238,10 @@ CREATE TABLE `tipos` (
 
 CREATE TABLE `usuario` (
   `idusuario` int(11) NOT NULL,
-  `nombre` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `correo` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `usuario` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `clave` varchar(50) COLLATE utf8_spanish_ci NOT NULL
+  `nombre` varchar(100) NOT NULL,
+  `correo` varchar(100) NOT NULL,
+  `usuario` varchar(20) NOT NULL,
+  `clave` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
@@ -212,7 +264,15 @@ CREATE TABLE `ventas` (
   `total` decimal(10,2) NOT NULL,
   `id_usuario` int(11) NOT NULL,
   `fecha` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `ventas`
+--
+
+INSERT INTO `ventas` (`id`, `id_cliente`, `total`, `id_usuario`, `fecha`) VALUES
+(1, 1, 5.00, 1, '2025-05-07 15:30:00'),
+(2, 2, 3.80, 9, '2025-05-07 16:00:00');
 
 --
 -- Índices para tablas volcadas
@@ -306,7 +366,7 @@ ALTER TABLE `ventas`
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `configuracion`
@@ -330,13 +390,13 @@ ALTER TABLE `detalle_temp`
 -- AUTO_INCREMENT de la tabla `detalle_venta`
 --
 ALTER TABLE `detalle_venta`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `laboratorios`
 --
 ALTER TABLE `laboratorios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `permisos`
@@ -348,19 +408,19 @@ ALTER TABLE `permisos`
 -- AUTO_INCREMENT de la tabla `presentacion`
 --
 ALTER TABLE `presentacion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `codproducto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `codproducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `tipos`
 --
 ALTER TABLE `tipos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
@@ -372,7 +432,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `ventas`
 --
 ALTER TABLE `ventas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas
